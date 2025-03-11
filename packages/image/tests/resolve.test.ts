@@ -27,6 +27,7 @@ describe('image resolveImage', () => {
     await resolveImage({ uri: jpgImageUrl });
 
     expect(fetchMock.mock.calls[0]?.[1]?.method).toBe('GET');
+    expect(fetchMock.mock.calls[0]?.[1]?.body).toBeUndefined();
   });
 
   test('Should fetch remote image using passed method', async () => {
@@ -46,13 +47,22 @@ describe('image resolveImage', () => {
     expect(fetchMock.mock.calls[0]?.[1]?.headers).toEqual(headers);
   });
 
-  test('Should fetch remote image using passed body', async () => {
+  test('Should fetch remote image using passed body for POST method', async () => {
     fetchMock.once(localJPGImage);
 
     const body = 'qwerty';
     await resolveImage({ uri: jpgImageUrl, body, method: 'POST' });
 
     expect(fetchMock.mock.calls[0]?.[1]?.body).toEqual(body);
+  });
+
+  test('Should not fetch remote image using passed body for GET method', async () => {
+    fetchMock.once(localJPGImage);
+
+    const body = 'qwerty';
+    await resolveImage({ uri: jpgImageUrl, body, method: 'GET' });
+
+    expect(fetchMock.mock.calls[0]?.[1]?.body).toBeUndefined();
   });
 
   test('Should fetch remote image using passed credentials', async () => {

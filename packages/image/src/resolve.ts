@@ -83,7 +83,7 @@ const fetchRemoteFile = async (src: RemoteImageSrc) => {
   const response = await fetch(src.uri, {
     method,
     headers,
-    body,
+    body: method === 'GET' ? undefined : body,
     credentials,
   });
 
